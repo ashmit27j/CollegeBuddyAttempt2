@@ -13,7 +13,7 @@ const AuthPage = () => {
 		>
 			<div className='w-full max-w-md'>
 				<h2 className='text-center text-3xl font-bold text-white mb-8'>
-					{isLogin ? "Sign in to College Buddy" : "Create a Swipe account"}
+					{isLogin ? "Sign in" : "Create Account"}
 				</h2>
 
 				<div className='bg-white shadow-xl rounded-lg p-8'>

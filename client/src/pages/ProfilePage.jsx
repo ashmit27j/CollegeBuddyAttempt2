@@ -36,16 +36,16 @@ const ProfilePage = () => {
 	console.log(image);
 
 	return (
-		<div className='min-h-screen bg-gray-50 flex flex-col'>
+		<div className='min-h-screen bg-gradient-to-br from-[#ffffff] to-[#d6edf5] flex flex-col'>
 			<Header />
 
 			<div className='flex-grow flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8'>
 				<div className='sm:mx-auto sm:w-full sm:max-w-md'>
-					<h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>Your Profile</h2>
+					<h2 className='mt-6 text-center text-3xl font-semibold text-gray-900'>Your Profile</h2>
 				</div>
 
 				<div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
-					<div className='bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-200'>
+					<div className='bg-white py-8 px-4 shadow rounded-xl sm:rounded-lg sm:px-10 border border-gray-200'>
 						<form onSubmit={handleSubmit} className='space-y-6'>
 							{/* NAME */}
 							<div>
@@ -60,8 +60,8 @@ const ProfilePage = () => {
 										required
 										value={name}
 										onChange={(e) => setName(e.target.value)}
-										className='appearance-none block w-full px-3 py-2 border border-gray-300
-										 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 
+										className='appearance-none bg-[#eaf6fa] block w-full px-3 py-2 border border-gray-300
+										 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1D617A] focus:border-[#30a7cf] 
 										sm:text-sm'
 									/>
 								</div>
@@ -80,7 +80,7 @@ const ProfilePage = () => {
 										required
 										value={age}
 										onChange={(e) => setAge(e.target.value)}
-										className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+										className='appearance-none bg-[#eaf6fa] block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1D617A] focus:border-[#30a7cf] sm:text-sm'
 									/>
 								</div>
 							</div>
@@ -93,7 +93,7 @@ const ProfilePage = () => {
 										<label key={option} className='inline-flex items-center'>
 											<input
 												type='radio'
-												className='form-radio text-pink-600'
+												className='form-radio text-[#1D617A]'
 												name='gender'
 												value={option.toLowerCase()}
 												checked={gender === option.toLowerCase()}
@@ -113,7 +113,7 @@ const ProfilePage = () => {
 										<label key={option} className='inline-flex items-center'>
 											<input
 												type='checkbox'
-												className='form-checkbox text-pink-600'
+												className='form-checkbox text-[#1D617A]'
 												checked={genderPreference.toLowerCase() === option.toLowerCase()}
 												onChange={() => setGenderPreference(option.toLowerCase())}
 											/>
@@ -136,7 +136,7 @@ const ProfilePage = () => {
 										rows={3}
 										value={bio}
 										onChange={(e) => setBio(e.target.value)}
-										className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm'
+										className='appearance-none bg-[#eaf6fa] block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#1D617A] focus:border-[#30a7cf]  sm:text-sm'
 									/>
 								</div>
 							</div>
@@ -147,7 +147,7 @@ const ProfilePage = () => {
 									<button
 										type='button'
 										onClick={() => fileInputRef.current.click()}
-										className='inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500'
+										className='bg-[#eaf6fa] inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#30a7cf]'
 									>
 										Upload Image
 									</button>
@@ -169,8 +169,8 @@ const ProfilePage = () => {
 
 							<button
 								type='submit'
-								className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-pink-600 hover:bg-pink-700 
-								focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500'
+								className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1D617A] hover:bg-[#30a7cf] 
+								focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D617A]'
 								disabled={loading}
 							>
 								{loading ? "Saving..." : "Save"}

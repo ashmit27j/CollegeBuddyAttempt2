@@ -22,13 +22,15 @@ export const Header = () => {
 	}, []);
 
 	return (
-		<header className='bg-gradient-to-r from-pink-500 via-pink-600 to-pink-700 shadow-lg'>
+		<header className='bg-gradient-to-br
+		from-[#1D617A] to-[#3d8098] shadow-lg'>
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
 				<div className='flex justify-between items-center py-4'>
 					<div className='flex items-center'>
 						<Link to='/' className='flex items-center space-x-2'>
-							<Flame className='w-8 h-8 text-white' />
-							<span className='text-2xl font-bold text-white hidden sm:inline'>Swipe</span>
+							{/* <Flame className='w-8 h-8 text-white' /> */}
+							Logo
+							<span className='text-2xl font-bold text-white hidden sm:inline'>CollegeBuddy</span>
 						</Link>
 					</div>
 
@@ -42,7 +44,7 @@ export const Header = () => {
 									<img
 										src={authUser.image || "/avatar.png"}
 										className='h-10 w-10 object-cover rounded-full border-2 border-white'
-										alt='User image'
+										alt='UserImage'
 									/>
 									<span className='text-white font-medium'>{authUser.name}</span>
 								</button>
@@ -70,14 +72,14 @@ export const Header = () => {
 							<>
 								<Link
 									to='/auth'
-									className='text-white hover:text-pink-200 transition duration-150 ease-in-out'
+									className='text-white hover:text-[#1D617A] transition duration-150 ease-in-out'
 								>
 									Login
 								</Link>
 								<Link
 									to='/auth'
-									className='bg-white text-pink-600 px-4 py-2 rounded-full font-medium
-                   hover:bg-pink-100 transition duration-150 ease-in-out'
+									className='bg-white text-[#1D617A] px-4 py-2 rounded-full font-medium
+                   hover:bg-[#addceb]  transition duration-150 ease-in-out'
 								>
 									Sign Up
 								</Link>
@@ -99,13 +101,13 @@ export const Header = () => {
 			{/* MOBILE MENU */}
 
 			{mobileMenuOpen && (
-				<div className='md:hidden bg-pink-600'>
+				<div className='md:hidden bg-[#1D617A] border-t'>
 					<div className='px-2 pt-2 pb-3 space-y-1 sm:px-3'>
 						{authUser ? (
 							<>
 								<Link
 									to='/profile'
-									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-pink-700'
+									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#227591]'
 									onClick={() => setMobileMenuOpen(false)}
 								>
 									Profile
@@ -115,7 +117,7 @@ export const Header = () => {
 										logout();
 										setMobileMenuOpen(false);
 									}}
-									className='block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-pink-700'
+									className='block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#227591]'
 								>
 									Logout
 								</button>
@@ -124,7 +126,7 @@ export const Header = () => {
 							<>
 								<Link
 									to='/auth'
-									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-pink-700'
+									className='block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#227591]'
 									onClick={() => setMobileMenuOpen(false)}
 								>
 									Login
