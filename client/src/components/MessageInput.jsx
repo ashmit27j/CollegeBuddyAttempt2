@@ -1,72 +1,94 @@
+// Import necessary libraries and components.
+// `useEffect`, `useRef`, and `useState` are React hooks for managing side effects, DOM references, and local state.
+// `useMessageStore` is a Zustand store for managing message-related actions.
+// `Send` and `Smile` are icons from the `lucide-react` library.
+// `EmojiPicker` is a component for selecting emojis.
 import { useEffect, useRef, useState } from "react";
 import { useMessageStore } from "../store/useMessageStore";
 import { Send, Smile } from "lucide-react";
 import EmojiPicker from "emoji-picker-react";
 
 const MessageInput = ({ match }) => {
-	const [message, setMessage] = useState("");
-	const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-	const emojiPickerRef = useRef(null);
+    // State variables:
+    // `message`: Stores the current message being typed.
+    // `showEmojiPicker`: Tracks whether the emoji picker is visible.
+    const [message, setMessage] = useState("");
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-	const { sendMessage } = useMessageStore();
+    // Reference for the emoji picker to detect clicks outside of it.
+    const emojiPickerRef = useRef(null);
 
-	const handleSendMessage = (e) => {
-		e.preventDefault();
-		if (message.trim()) {
-			sendMessage(match._id, message);
-			setMessage("");
-		}
-	};
+    // Access the `sendMessage` action from the `useMessageStore`.
+    const { sendMessage } = useMessageStore();
 
-	useEffect(() => {
-		const handleClickOutside = (event) => {
-			if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
-				setShowEmojiPicker(false);
-			}
-		};
+    // Function to handle sending a message.
+    // Prevents the default form submission behavior and sends the message if it's not empty.
+    const handleSendMessage = (e) => {
+        e.preventDefault();
+        if (message.trim()) {
+            sendMessage(match._id, message);
+            setMessage(""); // Clear the input field after sending the message.
+        }
+    };
 
-		document.addEventListener("mousedown", handleClickOutside);
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
-		};
-	}, []);
+    // Effect to handle clicks outside the emoji picker.
+    // Closes the emoji picker if a click is detected outside of it.
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+                setShowEmojiPicker(false);
+            }
+        };
 
-	return (
-		<form onSubmit={handleSendMessage} className='flex relative'>
-			<button
-				type='button'
-				onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-				className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#1D617A] focus:outline-none'
-			>
-				<Smile size={24} />
-			</button>
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
-			<input
-				type='text'
-				value={message}
-				onChange={(e) => setMessage(e.target.value)}
-				className='flex-grow p-3 pl-12 rounded-l-lg border-2 border-[#1D617A] 
+    return (
+        // Form container for the message input.
+        <form onSubmit={handleSendMessage} className='flex relative'>
+            {/* Button to toggle the emoji picker. */}
+            <button
+                type='button'
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#1D617A] focus:outline-none'
+            >
+                <Smile size={24} />
+            </button>
+
+            {/* Input field for typing a message. */}
+            <input
+                type='text'
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className='flex-grow p-3 pl-12 rounded-l-lg border-2 border-[#1D617A] 
         focus:outline-none focus:border-[#30a7cf]'
-				placeholder='Type a message...'
-			/>
+                placeholder='Type a message...'
+            />
 
-			<button
-				type='submit'
-				className='bg-[#1D617A] text-white p-3 rounded-r-lg 
-        hover:bg-pink-600 transition-colors focus:outline-none focus:ring-2 focus:ring-[#30a7cf] '
-			>
-				<Send size={24} />
-			</button>
-			{showEmojiPicker && (
-				<div ref={emojiPickerRef} className='absolute bottom-20 left-4'>
-					<EmojiPicker
-						onEmojiClick={(emojiObject) => {
-							setMessage((prevMessage) => prevMessage + emojiObject.emoji);
-						}}
-					/>
-				</div>
-			)}
-		</form>
-	);
+            {/* Button to send the message. */}
+            <button
+                type='submit'
+                className='bg-[#1D617A] text-white p-3 rounded-r-lg 
+        hover:bg-pink-600 transition-colors focus:outline-none focus:ring-2 focus:ring-[#30a7cf]'
+            >
+                <Send size={24} />
+            </button>
+
+            {/* Emoji picker dropdown. */}
+            {showEmojiPicker && (
+                <div ref={emojiPickerRef} className='absolute bottom-20 left-4'>
+                    <EmojiPicker
+                        onEmojiClick={(emojiObject) => {
+                            setMessage((prevMessage) => prevMessage + emojiObject.emoji);
+                        }}
+                    />
+                </div>
+            )}
+        </form>
+    );
 };
+
 export default MessageInput;
