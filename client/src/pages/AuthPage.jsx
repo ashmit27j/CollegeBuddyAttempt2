@@ -9,12 +9,11 @@ const AuthPage = () => {
 	return (
 		<div
 			className='min-h-screen flex items-center justify-center bg-gradient-to-br
-		from-red-500 to-pink-500 p-4
-	'
+		from-[#1D617A] to-[#3d8098] p-4'
 		>
 			<div className='w-full max-w-md'>
-				<h2 className='text-center text-3xl font-extrabold text-white mb-8'>
-					{isLogin ? "Sign in to Swipe" : "Create a Swipe account"}
+				<h2 className='text-center text-3xl font-bold text-white mb-8'>
+					{isLogin ? "Sign in to College Buddy" : "Create a Swipe account"}
 				</h2>
 
 				<div className='bg-white shadow-xl rounded-lg p-8'>
@@ -27,7 +26,7 @@ const AuthPage = () => {
 
 						<button
 							onClick={() => setIsLogin((prevIsLogin) => !prevIsLogin)}
-							className='mt-2 text-red-600 hover:text-red-800 font-medium transition-colors duration-300'
+							className='mt-2 text-[#1D617A] font-medium transition-colors duration-300'
 						>
 							{isLogin ? "Create a new account" : "Sign in to your account"}
 						</button>
