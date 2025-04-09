@@ -43,38 +43,41 @@ const HomePage = () => {
     }, [subscribeToNewMatches, unsubscribeFromNewMatches, authUser]);
 
     return (
-        // Main container for the home page with a gradient background.
-        <div
-            className='flex flex-col lg:flex-row min-h-screen bg-gradient-to-br from-[#eaf6fa] to-[#addceb]
-         overflow-hidden'
-        >
-            {/* Sidebar component for navigation. */}
-            <Sidebar />
+			// Main container for the home page with a gradient background.
+			<div
+				className="flex flex-col lg:flex-row min-h-screen bg-gradient-to-br from-[#eaf6fa] to-[#addceb]
+         overflow-hidden"
+			>
+				{/* Sidebar component for navigation. */}
+				<Sidebar />
 
-            {/* Main content area. */}
-            <div className='flex-grow flex flex-col overflow-hidden'>
-                {/* Header component at the top of the page. */}
-                <Header />
+				{/* Main content area. */}
+				<div className="flex-grow flex flex-col overflow-hidden">
+					{/* Header component at the top of the page. */}
+					<Header />
 
-                {/* Main section for swipe functionality and feedback. */}
-                <main className='flex-grow flex flex-col gap-10 justify-center items-center p-4 relative overflow-hidden'>
-                    {/* Render swipe area and feedback if user profiles are available and not loading. */}
-                    {userProfiles.length > 0 && !isLoadingUserProfiles && (
-                        <>
-                            <SwipeArea />
-                            <SwipeFeedback />
-                        </>
-                    )}
+					{/* Main section for swipe functionality and feedback. */}
+					{/* background */}
+					<main className="flex-grow flex flex-col gap-10 justify-center items-center p-4 relative overflow-hidden">
+						{/* Render swipe area and feedback if user profiles are available and not loading. */}
+						{userProfiles.length > 0 && !isLoadingUserProfiles && (
+							<>
+								<SwipeArea />
+								<SwipeFeedback />
+							</>
+						)}
 
-                    {/* Render a message when no more profiles are available. */}
-                    {userProfiles.length === 0 && !isLoadingUserProfiles && <NoMoreProfiles />}
+						{/* Render a message when no more profiles are available. */}
+						{userProfiles.length === 0 && !isLoadingUserProfiles && (
+							<NoMoreProfiles />
+						)}
 
-                    {/* Render a loading UI while user profiles are being fetched. */}
-                    {isLoadingUserProfiles && <LoadingUI />}
-                </main>
-            </div>
-        </div>
-    );
+						{/* Render a loading UI while user profiles are being fetched. */}
+						{isLoadingUserProfiles && <LoadingUI />}
+					</main>
+				</div>
+			</div>
+		);
 };
 
 export default HomePage;

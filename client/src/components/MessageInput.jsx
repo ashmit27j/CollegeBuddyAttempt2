@@ -47,48 +47,48 @@ const MessageInput = ({ match }) => {
     }, []);
 
     return (
-        // Form container for the message input.
-        <form onSubmit={handleSendMessage} className='flex relative'>
-            {/* Button to toggle the emoji picker. */}
-            <button
-                type='button'
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#1D617A] focus:outline-none'
-            >
-                <Smile size={24} />
-            </button>
+			// Form container for the message input.
+			<form onSubmit={handleSendMessage} className="flex relative">
+				{/* Button to toggle the emoji picker. */}
+				<button
+					type="button"
+					onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+					className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#1D617A] focus:outline-none"
+				>
+					<Smile size={24} />
+				</button>
 
-            {/* Input field for typing a message. */}
-            <input
-                type='text'
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className='flex-grow p-3 pl-12 rounded-l-lg border-2 border-[#1D617A] 
-        focus:outline-none focus:border-[#30a7cf]'
-                placeholder='Type a message...'
-            />
+				{/* Input field for typing a message. */}
+				<input
+					type="text"
+					value={message}
+					onChange={(e) => setMessage(e.target.value)}
+					className="flex-grow p-4 pl-16 rounded-l-2xl border-2 border-[#ebebeb] 
+        focus:outline-none focus:border-[#30a7cf]"
+					placeholder="Type a message..."
+				/>
 
-            {/* Button to send the message. */}
-            <button
-                type='submit'
-                className='bg-[#1D617A] text-white p-3 rounded-r-lg 
-        hover:bg-pink-600 transition-colors focus:outline-none focus:ring-2 focus:ring-[#30a7cf]'
-            >
-                <Send size={24} />
-            </button>
+				{/* Button to send the message. */}
+				<button
+					type="submit"
+					className="bg-[#1D617A] text-white p-3 rounded-r-2xl px-5
+        hover:bg-[#30a7cf] transition-colors focus:outline-none focus:ring-2 focus:ring-[#30a7cf]"
+				>
+					<Send size={24} />
+				</button>
 
-            {/* Emoji picker dropdown. */}
-            {showEmojiPicker && (
-                <div ref={emojiPickerRef} className='absolute bottom-20 left-4'>
-                    <EmojiPicker
-                        onEmojiClick={(emojiObject) => {
-                            setMessage((prevMessage) => prevMessage + emojiObject.emoji);
-                        }}
-                    />
-                </div>
-            )}
-        </form>
-    );
+				{/* Emoji picker dropdown. */}
+				{showEmojiPicker && (
+					<div ref={emojiPickerRef} className="absolute bottom-20 left-4">
+						<EmojiPicker
+							onEmojiClick={(emojiObject) => {
+								setMessage((prevMessage) => prevMessage + emojiObject.emoji);
+							}}
+						/>
+					</div>
+				)}
+			</form>
+		);
 };
 
 export default MessageInput;
