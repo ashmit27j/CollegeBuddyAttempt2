@@ -32,16 +32,34 @@ const ProfilePage = () => {
     };
 
     // Handle image file selection and convert the selected file to a Base64 string for preview.
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+    // const handleImageChange = (e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onloadend = () => {
+    //             setImage(reader.result);
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+	// };
+	const handleImageChange = (e) => {
+		const file = e.target.files[0];
+		if (file && file.size < 5 * 1024 * 1024) {
+			// Limit to 5MB
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				if (reader.result.startsWith("data:image")) {
+					setImage(reader.result);
+				} else {
+					alert("Invalid image format");
+				}
+			};
+			reader.readAsDataURL(file);
+		} else {
+			alert("File too large (max 5MB)");
+		}
+	};
+
 
     return (
 			// Main container for the profile page with a gradient background.
