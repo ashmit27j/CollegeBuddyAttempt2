@@ -19,7 +19,7 @@ export const useUserStore = create((set) => ({
         try {
             // Set `loading` to true to indicate the operation has started.
             set({ loading: true });
-
+            console.log(data);
             // Make an API request to update the user's profile.
             const res = await axiosInstance.put("/users/update", data);
 
