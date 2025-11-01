@@ -23,7 +23,7 @@ export const useAuthStore = create((set) => ({
             // Password validation: Ensure the password is at least 6 characters long.
             if (signupData.password.length < 6) {
                 toast.error("Password must be at least 6 characters long");
-                return;
+                return { success: false, message: "Password too short" };
             }
 
             // Set `loading` to true to indicate the operation has started.
@@ -32,17 +32,15 @@ export const useAuthStore = create((set) => ({
             // Make an API request to create a new user account.
             const res = await axiosInstance.post("/auth/signup", signupData);
 
-            // Update the `authUser` state with the newly created user's data.
-            set({ authUser: res.data.user });
+            // Do NOT auto-login here. The server sent OTP to email.
+            toast.success(res.data.message || "OTP sent to your email");
 
-            // Initialize the WebSocket connection for the authenticated user.
-            initializeSocket(res.data.user._id);
-
-            // Show a success toast notification.
-            toast.success("Account created successfully");
+            // Return server response so the component navigates to verify page.
+            return { success: true, email: res.data.email };
         } catch (error) {
             // Show an error toast notification if the API request fails.
-            toast.error(error.response.data.message || "Something went wrong");
+            toast.error(error.response?.data?.message || "Something went wrong");
+            return { success: false, message: error.response?.data?.message || "Server error" };
         } finally {
             // Set `loading` to false to indicate the operation has completed.
             set({ loading: false });
@@ -74,7 +72,7 @@ export const useAuthStore = create((set) => ({
             toast.success("Logged in successfully");
         } catch (error) {
             // Show an error toast notification if the API request fails.
-            toast.error(error.response.data.message || "Something went wrong");
+            toast.error(error.response?.data?.message || "Something went wrong");
         } finally {
             // Set `loading` to false to indicate the operation has completed.
             set({ loading: false });
@@ -94,7 +92,7 @@ export const useAuthStore = create((set) => ({
             if (res.status === 200) set({ authUser: null });
         } catch (error) {
             // Show an error toast notification if the API request fails.
-            toast.error(error.response.data.message || "Something went wrong");
+            toast.error(error.response?.data?.message || "Something went wrong");
         }
     },
 

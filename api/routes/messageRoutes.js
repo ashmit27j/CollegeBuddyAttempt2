@@ -1,25 +1,24 @@
-// Import necessary modules and middleware.
-// `express`: Framework for building web applications and APIs.
-// `protectRoute`: Middleware for protecting routes by verifying the user's JWT token.
-// `getConversation`, `sendMessage`: Controllers for handling message-related actions.
 import express from "express";
+import multer from "multer";
 import { protectRoute } from "../middleware/auth.js";
-import { getConversation, sendMessage } from "../controllers/messageController.js";
+import {
+  getConversation,
+  sendMessage,
+  deleteMessage,
+  getUnreadCounts,
+  markConversationRead,
+} from "../controllers/messageController.js";
 
-// Create a new router instance.
 const router = express.Router();
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-// Middleware: Protect all routes in this router.
-// Ensures only authenticated users can access the message-related routes.
 router.use(protectRoute);
 
-// Route: Handles sending a new message.
-// Calls the `sendMessage` controller to process and store the message.
-router.post("/send", sendMessage);
-
-// Route: Fetches the conversation between the current user and another user.
-// Calls the `getConversation` controller to retrieve the messages.
+router.post("/send", upload.single("file"), sendMessage);
 router.get("/conversation/:userId", getConversation);
+router.delete("/delete/:messageId", deleteMessage);
+router.get("/unread-count", getUnreadCounts);
+router.post("/read/:userId", markConversationRead);
 
-// Export the router for use in other parts of the application.
 export default router;

@@ -9,7 +9,10 @@ import { createServer } from "http";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.join(__dirname, ".env") });
+dotenv.config();
+console.log("✅ Loaded EMAIL_USER:", process.env.EMAIL_USER);
+console.log("✅ Loaded EMAIL_PASS:", process.env.EMAIL_PASS ? "✔️ Present" : "❌ Missing");
+
 
 const app = express();
 const httpServer = createServer(app);

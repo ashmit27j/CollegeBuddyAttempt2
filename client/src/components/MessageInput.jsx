@@ -1,94 +1,146 @@
-// Import necessary libraries and components.
-// `useEffect`, `useRef`, and `useState` are React hooks for managing side effects, DOM references, and local state.
-// `useMessageStore` is a Zustand store for managing message-related actions.
-// `Send` and `Smile` are icons from the `lucide-react` library.
-// `EmojiPicker` is a component for selecting emojis.
+// client/src/components/MessageInput.jsx
 import { useEffect, useRef, useState } from "react";
 import { useMessageStore } from "../store/useMessageStore";
-import { Send, Smile } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
+import { Send, Smile, Paperclip, X } from "lucide-react";
 import EmojiPicker from "emoji-picker-react";
 
 const MessageInput = ({ match }) => {
-    // State variables:
-    // `message`: Stores the current message being typed.
-    // `showEmojiPicker`: Tracks whether the emoji picker is visible.
-    const [message, setMessage] = useState("");
-    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const { sendMessage } = useMessageStore();
+  const { authUser } = useAuthStore();
 
-    // Reference for the emoji picker to detect clicks outside of it.
-    const emojiPickerRef = useRef(null);
+  // Local states
+  const [message, setMessage] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
-    // Access the `sendMessage` action from the `useMessageStore`.
-    const { sendMessage } = useMessageStore();
+  // Refs
+  const fileInputRef = useRef(null);
+  const emojiPickerRef = useRef(null);
 
-    // Function to handle sending a message.
-    // Prevents the default form submission behavior and sends the message if it's not empty.
-    const handleSendMessage = (e) => {
-        e.preventDefault();
-        if (message.trim()) {
-            sendMessage(match._id, message);
-            setMessage(""); // Clear the input field after sending the message.
-        }
+  // Send message handler
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (!message.trim() && !selectedFile) return;
+    await sendMessage(match._id, message.trim(), selectedFile?.file);
+    setMessage("");
+    removeSelectedFile();
+  };
+
+  // Handle emoji select
+  const onEmojiClick = (emojiObject) => {
+    setMessage((prev) => prev + emojiObject.emoji);
+  };
+
+  // Handle file selection
+  const onFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const previewUrl = file.type.startsWith("image/") ? URL.createObjectURL(file) : null;
+    setSelectedFile({ file, previewUrl });
+  };
+
+  // Remove file preview
+  const removeSelectedFile = () => {
+    if (selectedFile?.previewUrl) URL.revokeObjectURL(selectedFile.previewUrl);
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+        setShowEmojiPicker(false);
+      }
     };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-    // Effect to handle clicks outside the emoji picker.
-    // Closes the emoji picker if a click is detected outside of it.
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
-                setShowEmojiPicker(false);
-            }
-        };
+  return (
+    <div className="relative mt-1">
+      {/* Emoji Picker Dropdown */}
+      {showEmojiPicker && (
+        <div ref={emojiPickerRef} className="absolute bottom-16 left-3 z-50">
+          <EmojiPicker onEmojiClick={onEmojiClick} theme="light" />
+        </div>
+      )}
 
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+      {/* File Preview Box */}
+      {selectedFile && (
+        <div className="absolute -top-20 left-0 right-0 bg-white rounded-lg shadow p-2 flex items-center gap-3">
+          {selectedFile.previewUrl ? (
+            <img
+              src={selectedFile.previewUrl}
+              alt="preview"
+              className="w-16 h-12 object-cover rounded"
+            />
+          ) : (
+            <div className="w-16 h-12 flex items-center justify-center bg-gray-100 rounded">
+              <Paperclip />
+            </div>
+          )}
+          <div className="flex-1 truncate">
+            <div className="text-sm font-medium">{selectedFile.file.name}</div>
+            <div className="text-xs text-gray-500">
+              {(selectedFile.file.size / 1024).toFixed(1)} KB
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={removeSelectedFile}
+            className="p-1 text-gray-400 hover:text-red-500"
+          >
+            <X />
+          </button>
+        </div>
+      )}
 
-    return (
-			// Form container for the message input.
-			<form onSubmit={handleSendMessage} className="flex relative">
-				{/* Button to toggle the emoji picker. */}
-				<button
-					type="button"
-					onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-					className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#1D617A] focus:outline-none"
-				>
-					<Smile size={24} />
-				</button>
+      {/* Main Input Bar */}
+      <form
+        onSubmit={handleSend}
+        className="flex items-center gap-2 bg-white border border-gray-200 rounded-full shadow-sm px-3 py-2"
+      >
+        {/* Emoji Button */}
+        <button
+          type="button"
+          onClick={() => setShowEmojiPicker((s) => !s)}
+          className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100"
+        >
+          <Smile className="h-5 w-5 text-gray-600" />
+        </button>
 
-				{/* Input field for typing a message. */}
-				<input
-					type="text"
-					value={message}
-					onChange={(e) => setMessage(e.target.value)}
-					className="flex-grow p-4 pl-16 rounded-l-2xl border-2 border-[#ebebeb] 
-        focus:outline-none focus:border-[#30a7cf]"
-					placeholder="Type a message..."
-				/>
+        {/* File Upload (next to emoji) */}
+        <label className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 cursor-pointer">
+          <Paperclip className="h-5 w-5 text-gray-600" />
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            onChange={onFileChange}
+          />
+        </label>
 
-				{/* Button to send the message. */}
-				<button
-					type="submit"
-					className="bg-[#1D617A] text-white p-3 rounded-r-2xl px-5
-        hover:bg-[#30a7cf] transition-colors focus:outline-none focus:ring-2 focus:ring-[#30a7cf]"
-				>
-					<Send size={24} />
-				</button>
+        {/* Message Input */}
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder={`Message ${match.name}...`}
+          className="flex-1 h-10 px-3 text-gray-800 placeholder-gray-400 border-none focus:ring-0 bg-transparent"
+        />
 
-				{/* Emoji picker dropdown. */}
-				{showEmojiPicker && (
-					<div ref={emojiPickerRef} className="absolute bottom-20 left-4">
-						<EmojiPicker
-							onEmojiClick={(emojiObject) => {
-								setMessage((prevMessage) => prevMessage + emojiObject.emoji);
-							}}
-						/>
-					</div>
-				)}
-			</form>
-		);
+        {/* Send Button */}
+        <button
+          type="submit"
+          className="flex items-center justify-center w-10 h-10 bg-[#1D617A] hover:bg-[#227591] text-white rounded-full transition"
+        >
+          <Send className="h-5 w-5" />
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default MessageInput;
